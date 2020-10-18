@@ -1,26 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import store from "./store";
+import { rrfProps } from "./store";
+import {
+  UserIsAuthenticated,
+  UserIsNotAuthenticated,
+} from "./helpers/redirect";
+import AppNavbar from "./components/layout/AppNavbar";
+import Dashboard from "./components/layout/Dashboard";
+import AddClient from "./components/clients/AddClient";
+import EditClient from "./components/clients/EditClient";
+import ClientDetails from "./components/clients/ClientDetails";
+import Login from "./components/auth/Login";
+import Settings from "./components/settings/Settings";
+import Register from "./components/auth/Register";
+import NotFound from "./components/pages/NotFound";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <Router basename={process.env.PUBLIC_URL}>
+          <div>
+            <AppNavbar />
+            <div className="container">
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  component={UserIsAuthenticated(Dashboard)}
+                />
+                <Route
+                  exact
+                  path="/addclient"
+                  component={UserIsAuthenticated(AddClient)}
+                />
+                <Route
+                  exact
+                  path="/clientdetails/:id"
+                  component={UserIsAuthenticated(ClientDetails)}
+                />
+                <Route
+                  exact
+                  path="/editclient/:id"
+                  component={UserIsAuthenticated(EditClient)}
+                />
+                <Route
+                  exact
+                  path="/login"
+                  component={UserIsNotAuthenticated(Login)}
+                />
+                <Route
+                  exact
+                  path="/register"
+                  component={UserIsNotAuthenticated(Register)}
+                />
+                <Route
+                  exact
+                  path="/settings"
+                  component={UserIsAuthenticated(Settings)}
+                />
+                <Route component={NotFound} />
+              </Switch>
+            </div>
+          </div>
+        </Router>
+      </ReactReduxFirebaseProvider>
+    </Provider>
   );
 }
-
-export default App;
