@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { firestoreConnect } from "react-redux-firebase";
-import Spinner from "../layout/Spinner";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import Spinner from '../layout/Spinner';
 
 class EditClient extends Component {
   state = {
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    balance: "",
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    balance: '',
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -46,20 +46,20 @@ class EditClient extends Component {
       lastName,
       phone,
       email,
-      balance: balance === "" ? 0 : balance,
+      balance: balance === '' ? 0 : balance,
     };
 
-    await firestore.collection("Clients").doc(client.id).update(updatedClient);
+    await firestore.collection('Clients').doc(client.id).update(updatedClient);
 
     this.setState({
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      balance: "",
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: '',
+      balance: '',
     });
 
-    this.props.history.push("/");
+    this.props.history.push('/');
   };
 
   render() {
@@ -68,80 +68,80 @@ class EditClient extends Component {
 
     if (client) {
       return (
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <Link to="/" className="btn btn-link">
-                {" "}
-                <i className="fa fa-arrow-circle-left" /> Back to Dashboard
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-6'>
+              <Link to='/' className='btn btn-link'>
+                {' '}
+                <i className='fa fa-arrow-circle-left' /> Back to Dashboard
               </Link>
             </div>
           </div>
-          <div className="card">
-            <div className="card-header">Edit Client</div>
-            <div className="card-body">
+          <div className='card'>
+            <div className='card-header'>Edit Client</div>
+            <div className='card-body'>
               <form onSubmit={this.onUpdateClick}>
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
+                <div className='form-group'>
+                  <label htmlFor='firstName'>First Name</label>
                   <input
-                    type="text"
-                    name="firstName"
-                    className="form-control"
-                    minLength="2"
+                    type='text'
+                    name='firstName'
+                    className='form-control'
+                    minLength='2'
                     onChange={this.onChange}
                     value={firstName}
                     required
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
+                <div className='form-group'>
+                  <label htmlFor='lastName'>Last Name</label>
                   <input
-                    type="text"
-                    name="lastName"
-                    className="form-control"
-                    minLength="2"
+                    type='text'
+                    name='lastName'
+                    className='form-control'
+                    minLength='2'
                     onChange={this.onChange}
                     value={lastName}
                     required
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                <div className='form-group'>
+                  <label htmlFor='email'>Email</label>
                   <input
-                    type="email"
-                    name="email"
-                    className="form-control"
+                    type='email'
+                    name='email'
+                    className='form-control'
                     onChange={this.onChange}
                     value={email}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="phone">Phone</label>
+                <div className='form-group'>
+                  <label htmlFor='phone'>Phone</label>
                   <input
-                    type="text"
-                    name="phone"
-                    className="form-control"
-                    minLength="11"
+                    type='text'
+                    name='phone'
+                    className='form-control'
+                    minLength='11'
                     onChange={this.onChange}
                     value={phone}
                     required
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="balance">Balance</label>
+                <div className='form-group'>
+                  <label htmlFor='balance'>Balance</label>
                   <input
-                    type="text"
-                    name="balance"
-                    className="form-control"
+                    type='text'
+                    name='balance'
+                    className='form-control'
                     disabled={disableBalanceOnEdit}
                     onChange={this.onChange}
                     value={balance}
                   />
                 </div>
                 <input
-                  type="submit"
-                  value="Update"
-                  className="btn btn-primary btn-block"
+                  type='submit'
+                  value='Update'
+                  className='btn btn-primary btn-block'
                 />
               </form>
             </div>
@@ -156,10 +156,10 @@ class EditClient extends Component {
 
 export default compose(
   firestoreConnect((props) => [
-    { collection: "Clients", storeAs: "Client", doc: props.match.params.id },
+    { collection: 'Clients', storeAs: 'Client', doc: props.match.params.id },
   ]),
   connect((state, props) => ({
     client: state.firestore.ordered.Client && state.firestore.ordered.Client[0],
-    disableBalanceOnEdit: state.settings,
+    disableBalanceOnEdit: state.settings.disableBalanceOnEdit,
   }))
 )(EditClient);
